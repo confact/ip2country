@@ -5,7 +5,7 @@ require "yaml"
 class IP2Country
   VERSION = "0.1.4"
 
-  CACHE_DIR  = File.expand_path(File.dirname(File.dirname(__FILE__))) + "/cache"
+  CACHE_DIR  = File.expand_path(Dir.current) + "/cache"
   REGISTRARS = {
     "ARIN"    => "http://ftp.arin.net/pub/stats/arin/delegated-arin-extended-latest",
     "RIPE"    => "https://ftp.ripe.net/pub/stats/ripencc/delegated-ripencc-extended-latest",
@@ -40,6 +40,14 @@ class IP2Country
 
   def lookup(addr : String, lang : String = @default_lang) : String
     lookup(IPAddr.new(addr), lang)
+  end
+
+  def lookup_cc(addr : IPAddr) : String
+    @conversion.lookup(addr)
+  end
+
+  def lookup_cc(addr : String) : String
+    lookup_cc(IPAddr.new(addr))
   end
 
   def lookup_all(addr : IPAddr) : Hash(String, String)
